@@ -1,7 +1,7 @@
-export const schedulerDashboardGenerate = {
-  id: 'dashboard-generate',
+export const schedulerTemplate = {
+  id: 'TO_BE_REPLACED',
   scheduler: {
-    expression: '* * * * *',
+    expression: '1 0 * * *',
     endDate: '2029-12-30T23:29:00',
   },
   retry: {
