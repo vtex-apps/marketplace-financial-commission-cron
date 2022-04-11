@@ -1,7 +1,7 @@
 {
   "name": "marketplace-financial-commission-cron",
   "vendor": "vtex",
-  "version": "0.0.1",
+  "version": "0.0.2-beta.0",
   "title": "Financial commission for Marketplace Cron",
   "description": "",
   "categories": [],
