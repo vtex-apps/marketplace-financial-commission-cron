@@ -1,7 +1,7 @@
 import type { EventContext } from '@vtex/api'
 
 import type { Clients } from '../clients'
-import { schedulerDashboardGenerate } from '../configs/schedulerDashboardGenerate'
+import { schedulerTemplate } from '../configs/schedulerTemplate'
 import { constants } from '../constants'
 import { generateToken } from '../utils'
 
@@ -35,8 +35,9 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
         message: 'savedOnVbase-bearerToken',
       })
 
-      const schedulerRequest: SchedulerRequest = schedulerDashboardGenerate
+      const schedulerRequest: SchedulerRequest = schedulerTemplate
 
+      schedulerRequest.id = 'dashboard-generate'
       schedulerRequest.request.uri = `https://${ctx.vtex.workspace}--${ctx.vtex.account}.myvtex.com/_v/dashboard/generate`
       schedulerRequest.request.headers = {
         'cache-control': 'no-cache',
