@@ -8,7 +8,7 @@ import { generateToken } from '../utils'
 const setupScheduler = async (ctx: EventContext<Clients>) => {
   const {
     clients: { scheduler, vbase },
-    body: { to },
+    body: { to, from },
     vtex: { logger },
   } = ctx
 
@@ -22,7 +22,8 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
       const bearerToken = await generateToken(256)
 
       logger.info({
-        message: 'generated-bearerToken',
+        message: 'setupScheduler-bearerToken',
+        data: bearerToken,
       })
 
       await vbase.saveJSON(
@@ -32,7 +33,7 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
       )
 
       logger.info({
-        message: 'savedOnVbase-bearerToken',
+        message: 'setupScheduler-savedOnVbase',
       })
 
       const schedulerRequest: SchedulerRequest = schedulerTemplate
@@ -45,10 +46,45 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
       }
 
       try {
-        await scheduler.setInitialScheduler(schedulerRequest)
+        await scheduler.setInitialScheduler(appName, schedulerRequest)
+        logger.info({
+          message: 'setupScheduler-setDashboardGenerate',
+        })
       } catch (error) {
         logger.error({
-          message: 'saveScheduler-dashboardGenerateError',
+          message: 'setupScheduler-setDashboardGenerateError',
+          error,
+        })
+      }
+
+      return true
+    }
+  } else if (from) {
+    const [appName] = from?.id?.split('@')
+
+    if (
+      appName.length &&
+      `${process.env.VTEX_APP_VENDOR}.${process.env.VTEX_APP_NAME}` === appName
+    ) {
+      await vbase.deleteFile(
+        constants.SCHEDULER_CONFIGURATIONS_BUCKET,
+        constants.SCHEDULER_KEY
+      )
+
+      logger.info({
+        message: 'setupScheduler-deleteBearerTokenVBase',
+      })
+
+      const idName = 'dashboard-generate'
+
+      try {
+        await scheduler.deleteScheduler(appName, idName)
+        logger.info({
+          message: 'setupScheduler-deleteDashboardGenerate',
+        })
+      } catch (error) {
+        logger.error({
+          message: 'setupScheduler-deleteDashboardGenerateError',
           error,
         })
       }
