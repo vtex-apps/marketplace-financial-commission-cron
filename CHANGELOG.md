@@ -15,8 +15,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Update scheduler template to be used at more methods.
 
-## [0.0.1]
-
 ### Added
 
 - Initial version
