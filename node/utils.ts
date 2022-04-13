@@ -1,15 +1,15 @@
 export const generateToken = async (length: number): Promise<string> => {
-  const a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split(
+  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split(
     ''
   )
 
-  const b = []
+  const token = []
 
   for (let i = 0; i < length; i++) {
-    const j: any = (Math.random() * (a.length - 1)).toFixed(0)
+    const j: any = (Math.random() * (characters.length - 1)).toFixed(0)
 
-    b[i] = a[j]
+    token[i] = characters[j]
   }
 
-  return b.join('')
+  return token.join('')
 }
