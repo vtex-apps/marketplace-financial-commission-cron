@@ -9,8 +9,17 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
   const {
     clients: { scheduler, vbase },
     body: { to, from },
-    vtex: { logger },
+    vtex: { logger, production },
   } = ctx
+
+  if (production !== true) {
+    logger.info({
+      message: 'setupScheduler-notProduction',
+      data: `production: ${production}`,
+    })
+
+    return true
+  }
 
   if (to) {
     const [appName] = to?.id?.split('@')
@@ -39,7 +48,7 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
       const schedulerRequest: SchedulerRequest = schedulerTemplate
 
       schedulerRequest.id = 'dashboard-generate'
-      schedulerRequest.request.uri = `https://${ctx.vtex.workspace}--${ctx.vtex.account}.myvtex.com/_v/dashboard/generate`
+      schedulerRequest.request.uri = `https://${ctx.vtex.workspace}--${ctx.vtex.account}.myvtex.com/_v/scheduler/dashboard/generate`
       schedulerRequest.request.headers = {
         'cache-control': 'no-cache',
         Authorization: `Bearer ${bearerToken}`,

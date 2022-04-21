@@ -7,7 +7,7 @@
   "workers": 1,
   "routes": {
     "dashboardGenerate": {
-      "path": "/_v/dashboard/generate",
+      "path": "/_v/scheduler/dashboard/generate",
       "public": true
     }
   },
