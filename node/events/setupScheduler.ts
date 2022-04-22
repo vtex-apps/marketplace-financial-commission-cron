@@ -7,7 +7,7 @@ import { generateToken } from '../utils'
 
 const setupScheduler = async (ctx: EventContext<Clients>) => {
   const {
-    clients: { scheduler, vbase },
+    clients: { scheduler, vbase, marketFinancialCommission },
     body: { to, from },
     vtex: { logger, production },
   } = ctx
@@ -62,6 +62,25 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
       } catch (error) {
         logger.error({
           message: 'setupScheduler-setDashboardGenerateError',
+          error,
+        })
+      }
+
+      const dateNow = new Date()
+      const dateOneMonthAgo = new Date(
+        dateNow.getTime() - 30 * 24 * 60 * 60 * 1000
+      )
+
+      const params = `dateNow=${dateNow.toISOString()}&dateOneMonthAgo=${dateOneMonthAgo.toISOString()}`
+
+      try {
+        await marketFinancialCommission.dashboardGenerate(params)
+        logger.info({
+          message: 'setupScheduler-setDashboardGenerateFor30Days',
+        })
+      } catch (error) {
+        logger.error({
+          message: 'setupScheduler-setDashboardGenerateFor30Days',
           error,
         })
       }

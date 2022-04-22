@@ -27,8 +27,12 @@ export default class MarketFinancialCommission extends AppClient {
     return response
   }
 
-  public dashboardGenerate = async (): Promise<any> => {
+  public dashboardGenerate = async (params?: any): Promise<any> => {
     try {
+      if (params) {
+        this.routes.dashboardGenerate.endpoint = `${this.routes.dashboardGenerate}?${params}`
+      }
+
       const reponse = await this.getMarketplaceFinancialCommission(
         this.routes.dashboardGenerate
       )
