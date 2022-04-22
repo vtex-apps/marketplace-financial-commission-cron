@@ -10,7 +10,8 @@ export default class MarketFinancialCommission extends AppClient {
   }
 
   constructor(context: IOContext, options?: InstanceOptions) {
-    super('vtex.marketplace-financial-commission@1.x', context, options)
+    // TODO: update the app version
+    super('vtex.marketplace-financial-commission@0.x', context, options)
   }
 
   private getMarketplaceFinancialCommission = async (
@@ -21,7 +22,8 @@ export default class MarketFinancialCommission extends AppClient {
       headers: {
         VtexIdclientAutCookie: this.context.authToken,
       },
-      baseURL: `http://app.io.vtex.com/vtex.marketplace-financial-commission/v1/${this.context.account}/${this.context.workspace}`,
+      // TODO: update the app version
+      baseURL: `http://app.io.vtex.com/vtex.marketplace-financial-commission/v0/${this.context.account}/${this.context.workspace}`,
     })
 
     return response
