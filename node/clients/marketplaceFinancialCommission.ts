@@ -17,14 +17,36 @@ export default class MarketFinancialCommission extends AppClient {
   private getMarketplaceFinancialCommission = async (
     route: Route
   ): Promise<any> => {
-    const response = await this.http.get(route.endpoint, {
-      metric: `marketplaceFinancialCommission-${route.metric}`,
-      headers: {
-        VtexIdclientAutCookie: this.context.authToken,
-      },
-      // TODO: update the app version
-      baseURL: `http://app.io.vtex.com/vtex.marketplace-financial-commission/v0/${this.context.account}/${this.context.workspace}`,
-    })
+    const response = await this.http
+      .post(route.endpoint, {
+        metric: `marketplaceFinancialCommission-${route.metric}`,
+        headers: {
+          VtexIdclientAutCookie: this.context.authToken,
+        },
+        // TODO: update the app version
+        baseURL: `http://app.io.vtex.com/vtex.marketplace-financial-commission/v0/${this.context.account}/${this.context.workspace}`,
+      })
+      .catch((error) => {
+        console.error({
+          msj: `Error to generate dashboard - Endpoint ${route.endpoint}`,
+          messageError: error.message,
+          statusError: error.status,
+        })
+
+        this.context.logger.error({
+          message: 'dashboardGenerateError',
+          error,
+          route: route.endpoint,
+        })
+
+        const resultError = {
+          msj: `Error to generate dashboard - Endpoint ${route.endpoint}`,
+          messageError: error.message,
+          statusError: error.status,
+        }
+
+        return resultError
+      })
 
     return response
   }
@@ -32,7 +54,14 @@ export default class MarketFinancialCommission extends AppClient {
   public dashboardGenerate = async (params?: any): Promise<any> => {
     try {
       if (params) {
-        this.routes.dashboardGenerate.endpoint = `${this.routes.dashboardGenerate}?${params}`
+        const route: Route = {
+          endpoint: `${this.routes.dashboardGenerate.endpoint}?${params}`,
+          metric: 'dashboardGenerate',
+        }
+
+        const reponse = await this.getMarketplaceFinancialCommission(route)
+
+        return reponse
       }
 
       const reponse = await this.getMarketplaceFinancialCommission(

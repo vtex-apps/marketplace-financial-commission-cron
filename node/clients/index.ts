@@ -14,7 +14,7 @@ export class Clients extends IOClients {
   }
 }
 
-const TIMEOUT_MS = 10000
+const TIMEOUT_MS = 60000
 const CONCURRENCY = 2
 const memoryCache = new LRUCache<string, any>({ max: 5000 })
 

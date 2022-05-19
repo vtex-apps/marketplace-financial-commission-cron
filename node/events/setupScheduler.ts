@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import type { EventContext } from '@vtex/api'
 
 import type { Clients } from '../clients'
@@ -66,18 +67,50 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
         })
       }
 
-      const dateNow = new Date()
-      const dateOneMonthAgo = new Date(
-        dateNow.getTime() - 30 * 24 * 60 * 60 * 1000
-      )
-
-      const params = `dateNow=${dateNow.toISOString()}&dateOneMonthAgo=${dateOneMonthAgo.toISOString()}`
-
       try {
-        await marketFinancialCommission.dashboardGenerate(params)
-        logger.info({
-          message: 'setupScheduler-setDashboardGenerateFor30Days',
-        })
+        const dateNow = new Date(new Date().setDate(new Date().getDate() - 1))
+        const dateOneMonthAgo = new Date(
+          dateNow.getTime() - 30 * 24 * 60 * 60 * 1000
+        )
+
+        const result: any[] = []
+
+        let loop = dateOneMonthAgo
+        const endLoop = dateNow
+
+        const processGenerate = async () => {
+          while (loop <= endLoop) {
+            const [dayToProcess] = loop.toISOString().split('T')
+            let params = ''
+
+            params = `dateStart=${dayToProcess}&dateEnd=${dayToProcess}`
+
+            const responseSer =
+              await marketFinancialCommission.dashboardGenerate(params)
+
+            result.push(responseSer)
+
+            logger.info({
+              message: `setupScheduler-setDashboardGenerateFor30Days`,
+              params,
+              generate: JSON.stringify(responseSer),
+            })
+
+            const newDate = loop.setDate(loop.getDate() + 1)
+
+            loop = new Date(newDate)
+            console.info({ loop })
+
+            await delay(2000)
+          }
+
+          logger.info({
+            message: `DashboardGenerateFor30Days`,
+            generate: JSON.stringify(result),
+          })
+        }
+
+        processGenerate()
       } catch (error) {
         logger.error({
           message: 'setupScheduler-setDashboardGenerateFor30Days',
@@ -125,3 +158,7 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
 }
 
 export { setupScheduler }
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
