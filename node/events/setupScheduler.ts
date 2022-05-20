@@ -68,15 +68,18 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
       }
 
       try {
-        const dateNow = new Date(new Date().setDate(new Date().getDate() - 1))
+        const dayYesterday = new Date(
+          new Date().setDate(new Date().getDate() - 1)
+        )
+
         const dateOneMonthAgo = new Date(
-          dateNow.getTime() - 30 * 24 * 60 * 60 * 1000
+          dayYesterday.getTime() - 30 * 24 * 60 * 60 * 1000
         )
 
         const result: any[] = []
 
         let loop = dateOneMonthAgo
-        const endLoop = dateNow
+        const endLoop = dayYesterday
 
         const processGenerate = async () => {
           while (loop <= endLoop) {

@@ -15,7 +15,8 @@ export default class MarketFinancialCommission extends AppClient {
   }
 
   private getMarketplaceFinancialCommission = async (
-    route: Route
+    route: Route,
+    retries = 3
   ): Promise<any> => {
     const response = await this.http
       .post(route.endpoint, {
@@ -38,6 +39,12 @@ export default class MarketFinancialCommission extends AppClient {
           error,
           route: route.endpoint,
         })
+
+        if (retries > 0) {
+          console.info(`Starting retry --------> ${retries}`)
+
+          return this.getMarketplaceFinancialCommission(route, retries - 1)
+        }
 
         const resultError = {
           msj: `Error to generate dashboard - Endpoint ${route.endpoint}`,
