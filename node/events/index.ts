@@ -1,7 +1,9 @@
-import { setupScheduler } from './setupScheduler'
+import { setupSchedulerDashboard } from './setupSchedulerDashboard'
+import { setupSchedulerInvoice } from './setupSchedulerInvoice'
 
 const events = {
-  setupScheduler,
+  setupSchedulerDashboard,
+  setupSchedulerInvoice,
 }
 
 export { events }

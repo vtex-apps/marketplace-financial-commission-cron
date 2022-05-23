@@ -1,4 +1,7 @@
-export async function generate(ctx: Context, next: () => Promise<any>) {
+export async function generateDashboard(
+  ctx: Context,
+  next: () => Promise<any>
+) {
   const {
     clients: { marketFinancialCommission },
     vtex: { logger },

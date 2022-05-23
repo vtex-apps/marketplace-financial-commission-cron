@@ -2,7 +2,7 @@ import { AuthenticationError } from '@vtex/api'
 
 import { constants } from '../../constants'
 
-export async function schedulerAuthentication(
+export async function schedulerAuthenticationDashboard(
   ctx: Context,
   next: () => Promise<any>
 ) {

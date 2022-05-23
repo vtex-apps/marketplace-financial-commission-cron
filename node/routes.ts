@@ -1,11 +1,16 @@
 import { method } from '@vtex/api'
 
-import { generate } from './middlewares/dashboard/generate'
-import { schedulerAuthentication } from './middlewares/scheduler/schedulerAuthentication'
+import { generateDashboard } from './middlewares/dashboard/generateDashboard'
+import { generateInvoice } from './middlewares/invoice/generateInvoice'
+import { schedulerAuthenticationDashboard } from './middlewares/scheduler/schedulerAuthenticationDashboard'
+import { schedulerAuthenticationInvoice } from './middlewares/scheduler/schedulerAuthenticationInvoice'
 
 const routes = {
   dashboardGenerate: method({
-    POST: [schedulerAuthentication, generate],
+    POST: [schedulerAuthenticationDashboard, generateDashboard],
+  }),
+  invoiceGenerate: method({
+    GET: [schedulerAuthenticationInvoice, generateInvoice],
   }),
 }
 

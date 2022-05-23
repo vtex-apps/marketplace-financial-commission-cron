@@ -9,10 +9,18 @@
     "dashboardGenerate": {
       "path": "/_v/scheduler/dashboard/generate",
       "public": true
+    },
+    "invoiceGenerate": {
+      "path": "/_v/scheduler/invoice/generate",
+      "public": true
     }
   },
   "events": {
-    "setupScheduler": {
+    "setupSchedulerDashboard": {
+      "sender": "apps",
+      "topics": ["setup"]
+    },
+    "setupSchedulerInvoice": {
       "sender": "apps",
       "topics": ["setup"]
     }

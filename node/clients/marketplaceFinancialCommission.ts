@@ -4,7 +4,7 @@ import { AppClient } from '@vtex/api'
 export default class MarketFinancialCommission extends AppClient {
   private routes: Routes = {
     dashboardGenerate: {
-      endpoint: '_v/dashboard/generate',
+      endpoint: 'dashboard/generate',
       metric: 'dashboardGenerate',
     },
   }

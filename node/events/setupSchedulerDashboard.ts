@@ -6,7 +6,7 @@ import { schedulerTemplate } from '../configs/schedulerTemplate'
 import { constants } from '../constants'
 import { generateToken } from '../utils'
 
-const setupScheduler = async (ctx: EventContext<Clients>) => {
+const setupSchedulerDashboard = async (ctx: EventContext<Clients>) => {
   const {
     clients: { scheduler, vbase, marketFinancialCommission },
     body: { to, from },
@@ -160,7 +160,7 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
   return null
 }
 
-export { setupScheduler }
+export { setupSchedulerDashboard }
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
