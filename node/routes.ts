@@ -10,7 +10,7 @@ const routes = {
     POST: [schedulerAuthenticationDashboard, generateDashboard],
   }),
   invoiceGenerate: method({
-    GET: [schedulerAuthenticationInvoice, generateInvoice],
+    POST: [schedulerAuthenticationInvoice, generateInvoice],
   }),
 }
 
