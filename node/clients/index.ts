@@ -1,6 +1,7 @@
 import type { ClientsConfig } from '@vtex/api'
 import { IOClients, LRUCache } from '@vtex/api'
 
+import InvoiceFinancialCommission from './invoiceFinancialComission'
 import MarketFinancialCommission from './marketplaceFinancialCommission'
 import Scheduler from './scheduler'
 
@@ -12,9 +13,16 @@ export class Clients extends IOClients {
   public get scheduler() {
     return this.getOrSet('scheduler', Scheduler)
   }
+
+  public get invoiceFinancialComission() {
+    return this.getOrSet(
+      'invoiceFinancialComission',
+      InvoiceFinancialCommission
+    )
+  }
 }
 
-const TIMEOUT_MS = 10000
+const TIMEOUT_MS = 60000
 const CONCURRENCY = 2
 const memoryCache = new LRUCache<string, any>({ max: 5000 })
 

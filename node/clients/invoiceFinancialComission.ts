@@ -1,11 +1,11 @@
 import type { InstanceOptions, IOContext } from '@vtex/api'
 import { AppClient } from '@vtex/api'
 
-export default class MarketFinancialCommission extends AppClient {
+export default class InvoiceFinancialCommission extends AppClient {
   private routes: Routes = {
-    dashboardGenerate: {
-      endpoint: 'dashboard/generate',
-      metric: 'dashboardGenerate',
+    generateInvoice: {
+      endpoint: 'invoice/generate',
+      metric: 'GenerateInvoice',
     },
   }
 
@@ -14,12 +14,12 @@ export default class MarketFinancialCommission extends AppClient {
     super('vtex.marketplace-financial-commission@0.x', context, options)
   }
 
-  private getMarketplaceFinancialCommission = async (
+  private generateInvoiceFinancialCommission = async (
     route: Route,
     retries = 3
   ): Promise<any> => {
     const response = await this.http
-      .post(route.endpoint, {
+      .get(route.endpoint, {
         metric: `marketplaceFinancialCommission-${route.metric}`,
         headers: {
           VtexIdclientAutCookie: this.context.authToken,
@@ -29,25 +29,25 @@ export default class MarketFinancialCommission extends AppClient {
       })
       .catch((error) => {
         console.error({
-          msj: `Error to generate dashboard - Endpoint ${route.endpoint}`,
+          msj: `Error to generate invoice - Endpoint ${route.endpoint}`,
           messageError: error.message,
           statusError: error.status,
         })
 
         this.context.logger.error({
-          message: 'dashboardGenerateError',
+          message: 'generateInvoiceError',
           error,
           route: route.endpoint,
         })
 
         if (retries > 0) {
-          console.info(`Starting retry --------> ${retries}`)
+          console.info(`Starting retry Invoices --------> ${retries}`)
 
-          return this.getMarketplaceFinancialCommission(route, retries - 1)
+          return this.generateInvoiceFinancialCommission(route, retries - 1)
         }
 
         const resultError = {
-          msj: `Error to generate dashboard - Endpoint ${route.endpoint}`,
+          msj: `Error to generate invoice - Endpoint ${route.endpoint}`,
           messageError: error.message,
           statusError: error.status,
         }
@@ -58,31 +58,20 @@ export default class MarketFinancialCommission extends AppClient {
     return response
   }
 
-  public dashboardGenerate = async (params?: any): Promise<any> => {
+  public generateInvoice = async (): Promise<any> => {
     try {
-      if (params) {
-        const route: Route = {
-          endpoint: `${this.routes.dashboardGenerate.endpoint}?${params}`,
-          metric: 'dashboardGenerate',
-        }
-
-        const reponse = await this.getMarketplaceFinancialCommission(route)
-
-        return reponse
-      }
-
-      const reponse = await this.getMarketplaceFinancialCommission(
-        this.routes.dashboardGenerate
+      const response = await this.generateInvoiceFinancialCommission(
+        this.routes.generateInvoice
       )
 
-      return reponse
+      return response
     } catch (error) {
       this.context.logger.error({
-        message: 'dashboardGenerateError',
+        message: 'generateInvoiceError',
         error,
       })
 
-      throw new Error('dashboardGenerate error')
+      throw new Error('generateInvoice error')
     }
   }
 }

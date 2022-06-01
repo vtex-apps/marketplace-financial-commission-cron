@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import type { EventContext } from '@vtex/api'
 
 import type { Clients } from '../clients'
@@ -5,16 +6,16 @@ import { schedulerTemplate } from '../configs/schedulerTemplate'
 import { constants } from '../constants'
 import { generateToken } from '../utils'
 
-const setupScheduler = async (ctx: EventContext<Clients>) => {
+const setupSchedulerInvoice = async (ctx: EventContext<Clients>) => {
   const {
-    clients: { scheduler, vbase, marketFinancialCommission },
+    clients: { scheduler, vbase },
     body: { to, from },
     vtex: { logger, production },
   } = ctx
 
   if (production !== true) {
     logger.info({
-      message: 'setupScheduler-notProduction',
+      message: 'setupSchedulerInvoice-notProduction',
       data: `production: ${production}`,
     })
 
@@ -31,24 +32,24 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
       const bearerToken = await generateToken(256)
 
       logger.info({
-        message: 'setupScheduler-bearerToken',
+        message: 'setupSchedulerInvoice-bearerToken',
         data: bearerToken,
       })
 
       await vbase.saveJSON(
         constants.SCHEDULER_CONFIGURATIONS_BUCKET,
-        constants.SCHEDULER_KEY,
+        constants.SCHEDULER_KEY_INVOICE,
         bearerToken
       )
 
       logger.info({
-        message: 'setupScheduler-savedOnVbase',
+        message: 'setupSchedulerInvoice-savedOnVbase',
       })
 
       const schedulerRequest: SchedulerRequest = schedulerTemplate
 
-      schedulerRequest.id = 'dashboard-generate'
-      schedulerRequest.request.uri = `https://${ctx.vtex.workspace}--${ctx.vtex.account}.myvtex.com/_v/scheduler/dashboard/generate`
+      schedulerRequest.id = 'invoice-generate'
+      schedulerRequest.request.uri = `https://${ctx.vtex.workspace}--${ctx.vtex.account}.myvtex.com/_v/scheduler/invoice/generate`
       schedulerRequest.request.headers = {
         'cache-control': 'no-cache',
         Authorization: `Bearer ${bearerToken}`,
@@ -57,30 +58,11 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
       try {
         await scheduler.setInitialScheduler(appName, schedulerRequest)
         logger.info({
-          message: 'setupScheduler-setDashboardGenerate',
+          message: 'setupSchedulerInvoice-setInvoiceGenerate',
         })
       } catch (error) {
         logger.error({
-          message: 'setupScheduler-setDashboardGenerateError',
-          error,
-        })
-      }
-
-      const dateNow = new Date()
-      const dateOneMonthAgo = new Date(
-        dateNow.getTime() - 30 * 24 * 60 * 60 * 1000
-      )
-
-      const params = `dateNow=${dateNow.toISOString()}&dateOneMonthAgo=${dateOneMonthAgo.toISOString()}`
-
-      try {
-        await marketFinancialCommission.dashboardGenerate(params)
-        logger.info({
-          message: 'setupScheduler-setDashboardGenerateFor30Days',
-        })
-      } catch (error) {
-        logger.error({
-          message: 'setupScheduler-setDashboardGenerateFor30Days',
+          message: 'setupSchedulerInvoice-setInvoiceGenerateError',
           error,
         })
       }
@@ -96,23 +78,23 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
     ) {
       await vbase.deleteFile(
         constants.SCHEDULER_CONFIGURATIONS_BUCKET,
-        constants.SCHEDULER_KEY
+        constants.SCHEDULER_KEY_INVOICE
       )
 
       logger.info({
-        message: 'setupScheduler-deleteBearerTokenVBase',
+        message: 'setupSchedulerInvoice-deleteBearerTokenVBase',
       })
 
-      const idName = 'dashboard-generate'
+      const idName = 'invoice-generate'
 
       try {
         await scheduler.deleteScheduler(appName, idName)
         logger.info({
-          message: 'setupScheduler-deleteDashboardGenerate',
+          message: 'setupSchedulerInvoice-deleteInvoiceGenerate',
         })
       } catch (error) {
         logger.error({
-          message: 'setupScheduler-deleteDashboardGenerateError',
+          message: 'setupSchedulerInvoice-deleteInvoiceGenerateError',
           error,
         })
       }
@@ -124,4 +106,4 @@ const setupScheduler = async (ctx: EventContext<Clients>) => {
   return null
 }
 
-export { setupScheduler }
+export { setupSchedulerInvoice }
