@@ -4,3 +4,4 @@
 **Upcoming documentation:**
 
  - [Feature/generate](https://github.com/vtex-apps/marketplace-financial-commission-cron/pull/2)
+ - [Commit conditional execution](https://github.com/vtex-apps/marketplace-financial-commission-cron/pull/3)
