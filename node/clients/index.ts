@@ -4,6 +4,7 @@ import { IOClients, LRUCache } from '@vtex/api'
 import InvoiceFinancialCommission from './invoiceFinancialComission'
 import MarketFinancialCommission from './marketplaceFinancialCommission'
 import Scheduler from './scheduler'
+import TypeIntegration from './typeIntegration'
 
 export class Clients extends IOClients {
   public get marketFinancialCommission() {
@@ -19,6 +20,10 @@ export class Clients extends IOClients {
       'invoiceFinancialComission',
       InvoiceFinancialCommission
     )
+  }
+
+  public get typeIntegration() {
+    return this.getOrSet('typeIntegration', TypeIntegration)
   }
 }
 

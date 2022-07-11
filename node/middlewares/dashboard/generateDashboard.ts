@@ -3,17 +3,31 @@ export async function generateDashboard(
   next: () => Promise<any>
 ) {
   const {
-    clients: { marketFinancialCommission },
+    clients: { marketFinancialCommission, typeIntegration },
     vtex: { logger },
   } = ctx
 
   try {
-    const response = await marketFinancialCommission.dashboardGenerate()
+    const { integration } = await typeIntegration.typeIntegration()
 
-    logger.info({
-      message: 'outgoing-dashboardGenerateResponse',
-      data: response,
-    })
+    if (
+      integration === '1' ||
+      integration === undefined ||
+      integration === null
+    ) {
+      const response = await marketFinancialCommission.dashboardGenerate()
+
+      logger.info({
+        message: 'outgoing-dashboardGenerateResponse',
+        data: response,
+      })
+    } else {
+      logger.info({
+        message:
+          'The Dashboard does not perform the automatic generation since the financial-commission app is configured as external integration.',
+      })
+    }
+
     ctx.status = 200
     ctx.body = 'ok'
   } catch (error) {
