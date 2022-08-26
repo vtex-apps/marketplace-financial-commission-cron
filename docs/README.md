@@ -26,4 +26,10 @@ If the integration type configuration used in the marketplace of the `vtex.marke
 
 The `events` directory contains the schedulers to be created, which are activated when the application is installed. The `setupScheduleDashboard` file contains the process of sending the request for the generation of the last 30 days.
 
-En el directorio `config\schedulerTemplate` se encuentra la configuracion de los scheduler.
+![image](https://user-images.githubusercontent.com/14004558/186959432-d1287f28-5f2c-4d97-9ba8-c9687467743d.png)
+
+
+En el directorio `configs\schedulerTemplate` se encuentra la configuracion de los scheduler.
+
+![image](https://user-images.githubusercontent.com/14004558/186959391-72b98072-a9ba-4859-aed1-46c9028c7f9a.png)
+
