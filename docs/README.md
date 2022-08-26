@@ -21,3 +21,9 @@ When the app is installed it automatically triggers the `dashboard/generate` enp
 ## External Invoice
 
 If the integration type configuration used in the marketplace of the `vtex.marketplace-financial-commission` app is set to `external`, the calls to the above mentioned `dashboard/generate` and `invoice/generate`  endpoints will not be triggered.
+
+## Events
+
+The `events` directory contains the schedulers to be created, which are activated when the application is installed. The `setupScheduleDashboard` file contains the process of sending the request for the generation of the last 30 days.
+
+En el directorio `config\schedulerTemplate` se encuentra la configuracion de los scheduler.
