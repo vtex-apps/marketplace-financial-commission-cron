@@ -1,6 +1,6 @@
 # Marketplace Financial Commission Cron
 
-Application used exclusively for the Financial Commission project and installed together with the `vtex.marketplace-financial-commission` app.
+Application used exclusively for the Financial Commission project and installed together with the `vtex.marketplace-financial-commission` app. For more information [click here](https://github.com/vtex-apps/marketplace-financial-commission).
 
 The application has the function of calling the endpoints responsible for generating the dashboard and generating invoices. 
 
